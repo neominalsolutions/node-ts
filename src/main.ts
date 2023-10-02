@@ -1,0 +1,23 @@
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { ValidationPipe } from "@nestjs/common";
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  const config = new DocumentBuilder()
+    .setTitle("TGS API")
+    .setDescription("TGS API DOC")
+    .addTag("")
+    .setVersion("1.0")
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup("api-docs", app, document);
+
+  // uygulama genelinde validasyon hatalarını merkezileştiren kod
+  app.useGlobalPipes(new ValidationPipe());
+
+  await app.listen(3000);
+}
+bootstrap();
